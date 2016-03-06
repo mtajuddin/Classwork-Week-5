@@ -1,0 +1,176 @@
+final int maxSegments = 100;
+int[] xSegments = new int[maxSegments];
+int[] ySegments = new int[maxSegments];
+
+final int gridSize = 20;
+
+void setup() {
+  size(500, 500);
+  
+  timeBetweenMoves = 500;
+  
+  for (int i = 0; i < maxSegments; i += 1) {
+    //Whattt??)
+    xSegments[i] = (ySegments[i] = -1);
+  }
+  xSegments[0] = width/ 2 / gridSize;
+  ySegments[0] = height/ 2 / gridSize;
+  
+  //Why no variable type indication? Doesnt mattr
+  snakeLength = 1;
+  foodX = 10;
+  foodY = 20;
+  foodXX = 20;
+  foodYY = 20;
+  ellipseMode(CORNER);
+}
+
+int lastMove = 0;
+int timeBetweenMoves;
+
+int xSpeed = 1;
+int ySpeed = 0;
+
+//Why declare the variable type after you assigned the value?
+int snakeLength;
+
+int foodX;
+int foodY;
+int foodXX;
+int foodYY;
+int foodXXX;
+int foodYYY;
+float r = random(0,255);
+float g = random(0,255);
+float b = random(0,255);
+
+void draw() {
+  background(r, g, b);
+  noStroke();
+
+  fill(0);
+  for (int i = 0; i < maxSegments; i += 1) {
+    //Why is the array being multiplied by 20 (gridSize)?
+    rect(xSegments[i]*gridSize, ySegments[i]*gridSize, gridSize, gridSize);
+  }
+
+  fill(255, 0, 0);
+  ellipse(foodX * gridSize, foodY * gridSize, gridSize, gridSize);
+  
+  fill(25, 56, 78);
+  ellipse(foodXX * gridSize, foodYY * gridSize, gridSize, gridSize);
+  
+  fill(43, 67, 90);
+  ellipse(foodXXX * gridSize, foodYYY * gridSize, gridSize, gridSize);
+  
+
+  if (millis() - lastMove > timeBetweenMoves) {
+    //Why do we add xSpeed and ySpeed to the arrays below?
+    //Why is lastMove assigned the value of millis?
+    lastMove = millis();
+    int nextX = xSegments[0] + xSpeed;
+    int nextY = ySegments[0] + ySpeed;
+
+    for (int i = snakeLength-1; i > 0; i -= 1) {
+      //Why decrement snakeLength if its value is 1? Is is it b/c he loses length in game?
+      xSegments[i] = xSegments[i-1];
+      ySegments[i] = ySegments[i-1];
+    }
+    if (isThereASegmentAtPosition(nextX, nextY)) {
+      // snake hit itself! reset the game!
+      setup();
+    } if (nextX > width / gridSize || nextX < 0) {
+      setup();
+    } else 
+      if (nextY > height / gridSize || nextY < 0) {
+        setup();
+      }
+     else {
+      //Does this add a value to the array?
+      xSegments[0] = nextX;
+      ySegments[0] = nextY;
+      if (nextX == foodX && nextY == foodY) {
+        getFood();
+        r = random(0,255);
+        g = random(0,255);
+        b = random(0,255);
+      }
+      if (nextX == foodXX && nextY == foodYY) {
+        getFood2();
+        r = random(0,255);
+        g = random(0,255);
+        b = random(0,255);
+      }
+      if (nextX == foodXXX && nextY == foodYYY) {
+        getFood3();
+        r = random(0,255);
+        g = random(0,255);
+        b = random(0,255);
+      }
+    }
+  }
+}
+
+void getFood() {
+  snakeLength += 1;
+
+  while (isThereASegmentAtPosition(foodX, foodY)) {
+    foodX = floor(random(width/gridSize));
+    foodY = floor(random(width/gridSize));
+    timeBetweenMoves = timeBetweenMoves-10;
+  } 
+}
+
+
+
+void getFood2() {
+  snakeLength += 1;
+
+  while (isThereASegmentAtPosition(foodXX, foodYY)) {
+    foodXX = floor(random(width/gridSize));
+    foodYY = floor(random(width/gridSize));
+    timeBetweenMoves = timeBetweenMoves-10;
+  } 
+}
+
+void getFood3() {
+  snakeLength += 1;
+
+  while (isThereASegmentAtPosition(foodXXX, foodYYY)) {
+    foodXXX = floor(random(width/gridSize));
+    foodYYY = floor(random(width/gridSize));
+    timeBetweenMoves = timeBetweenMoves-10;
+  } 
+}
+
+
+boolean isThereASegmentAtPosition(int x, int y) {
+  for (int i = 0; i < snakeLength; i += 1) {
+    if (xSegments[i] == x && ySegments[i] == y) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+void keyPressed() {
+  if (key == CODED) {
+    if (keyCode == UP) {
+      ySpeed = -1;
+      xSpeed = 0;
+    }
+    if (keyCode == DOWN) {
+      ySpeed = 1;
+      xSpeed = 0;
+    }
+    if (keyCode == RIGHT) {
+      ySpeed = 0;
+      xSpeed = 1;
+    }
+    if (keyCode == LEFT) {
+      ySpeed = 0;
+      xSpeed = -1;
+    }
+  }
+}
