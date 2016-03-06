@@ -1,0 +1,12 @@
+//Why declare the variable type after you assigned the value?
+//It doesn't matter.
+
+//How can I change the background color everytime the snake eats food?
+//At first I tried to just input random into the if statements for the instructions for getting food.
+//This only would make the background flash when the snake got the food.
+//I then noticed that the background's value in the draw function weren't changing and I reasoned this was keeping the color white.
+//I then created variables with random numbers and placed them into the r, g, and b values for background.
+//This allowed for the background to take different values.
+
+//What values should I use for my if statement?
+//nextX and nextY - Their value changes in relation to the snake's movement.
